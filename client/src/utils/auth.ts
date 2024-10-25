@@ -6,6 +6,8 @@ interface UserToken {
   exp: number;
 }
 
+const tokenName = 'booksearch-token';
+
 // create a new class to instantiate for a user
 class AuthService {
   // get user data
@@ -36,12 +38,12 @@ class AuthService {
 
   getToken() {
     // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token');
+    return localStorage.getItem(tokenName);
   }
 
   login(idToken: string) {
     // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken);
+    localStorage.setItem(tokenName, idToken);
     window.location.assign('/');
   }
 
