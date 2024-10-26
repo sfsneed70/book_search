@@ -1,6 +1,6 @@
-import { User } from "../models/index";
-import type { BookDocument } from "../models/Book";
-import { signToken, AuthenticationError } from "../services/auth";
+import { User } from "../models/index.js";
+import type { BookDocument } from "../models/Book.js";
+import { signToken, AuthenticationError } from "../services/auth.js";
 
 interface User {
   _id: string;
@@ -19,13 +19,24 @@ interface AddUserArgs {
   };
 }
 
-interface Book {
-  bookId: string;
-  title: string;
-  authors: string[];
-  description: string;
-  image: string;
-  link: string;
+// interface Book {
+//   bookId: string;
+//   title: string;
+//   authors: string[];
+//   description: string;
+//   image: string;
+//   link: string;
+// }
+
+interface saveBookArgs {
+  input: {
+    authors: string[];
+    description: string;
+    title: string;
+    bookId: string;
+    image: string;
+    link: string;
+  };
 }
 
 interface Context {
@@ -34,12 +45,14 @@ interface Context {
 
 const resolvers = {
   Query: {
-    me: async (_parent: User, _args: User, context: Context): Promise<User | null> => {
+    users: async (): Promise<User[]> => {
+      return await User.find();
+    },
+    me: async (_parent: any, _args: any, context: Context): Promise<User | null> => {
       if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id })
+        return await User.findOne({ _id: context.user._id })
           .select("-__v -password")
           .populate("savedBooks");
-        return userData;
       }
 
       throw new AuthenticationError("Not logged in");
@@ -53,7 +66,7 @@ const resolvers = {
       return { token, user };
     },
 
-    login: async (_parent: User, { email, password }: { email: string; password: string }): Promise<{ token: string; user: User }> => {
+    login: async (_parent: any, { email, password }: { email: string; password: string }): Promise<{ token: string; user: User }> => {
       const user = await User.findOne({ email });
       if (!user) {
         throw new AuthenticationError("Incorrect credentials");
@@ -66,11 +79,11 @@ const resolvers = {
       return { token, user };
     },
 
-    saveBook: async (_parent: User, args: Book, context: Context) => {
+    saveBook: async (_parent: any, { input }: saveBookArgs, context: Context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: args } },
+          { $addToSet: { savedBooks: input } },
           { new: true, runValidators: true }
         ).populate("savedBooks");
         return updatedUser;
@@ -78,13 +91,13 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
 
-    deleteBook: async (_parent: User, { bookId }: Book, context: Context) => {
+    deleteBook: async (_parent: any, bookId: String, context: Context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           {
             _id: context.user._id,
           },
-          { $pull: { savedBooks: { bookId } } },
+          { $pull: { savedBooks: { bookId:  bookId} } },
           { new: true }
         ).populate("savedBooks");
         return updatedUser;
