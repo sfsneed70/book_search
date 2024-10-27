@@ -18,16 +18,6 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [login, { error }] = useMutation(LOGIN_USER);
-
-  // const [savedBookIds, setSavedBookIds] = "";
-
-
-  // const getSavedBooks = () => {
-  //   const { data } = useQuery(GET_BOOKIDS);
-  //   const savedBookIds = data?.me.savedBooks.map((book: any) => book.bookId) || [];
-  //   console.log("here");
-  // console.log(savedBookIds);
-  // };
   
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
