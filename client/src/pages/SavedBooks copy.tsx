@@ -1,44 +1,37 @@
 import { useState, useEffect } from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
-import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
 // import { getMe, deleteBook } from "../utils/API";
 import Auth from "../utils/auth";
 // import { removeBookId } from "../utils/localStorage";
-// import type { User } from "../models/User";
+import type { User } from "../models/User";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { DELETE_BOOK } from "../utils/mutations";
 
 const SavedBooks = () => {
-  // const [userData, setUserData] = useState({
+  // const [userData, setUserData] = useState<User>({
   //   username: "",
-  //   // email: "",
-  //   // password: "",
+  //   email: "",
+  //   password: "",
   //   savedBooks: [],
   // });
-  const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
   const { loading, data } = useQuery(GET_ME);
 
-  const [deleteBook, error] = useMutation(DELETE_BOOK, {
+  const [deleteBook] = useMutation(DELETE_BOOK, {
     refetchQueries: [
       GET_ME,
       'me'
     ]
   });
 
-    // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-  useEffect(() => {
-    return () => saveBookIds(savedBookIds);
-  });
-
   // setUserData(data?.me || {});
   const userData = data?.me || {};
   //   // use this to determine if `useEffect()` hook needs to run again
   // const userDataLength = Object.keys(userData).length;
+  console.log(userData);
 
 
   const handleDeleteBook = async (bookId: string) => {
@@ -52,9 +45,9 @@ const SavedBooks = () => {
       await deleteBook({
         variables: { bookId },
       });
-      setSavedBookIds(savedBookIds.filter((savedBookId: string) => savedBookId !== bookId));
+
     } catch (err) {
-      console.error(error);
+      console.error(err);
     }
   };
 

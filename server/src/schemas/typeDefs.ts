@@ -11,9 +11,12 @@ const typeDefs = gql`
   }
 
   input UserInput {
+    # input: {
     username: String!
     email: String!
     password: String!
+    savedBooks: [BookInput]
+    # }
   }
 
   type Book {
@@ -27,7 +30,7 @@ const typeDefs = gql`
 
   input BookInput {
     authors: [String]
-    description: String!
+    description: String
     title: String!
     bookId: String!
     image: String
