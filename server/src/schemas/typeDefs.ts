@@ -11,12 +11,10 @@ const typeDefs = gql`
   }
 
   input UserInput {
-    # input: {
     username: String!
     email: String!
     password: String!
     savedBooks: [BookInput]
-    # }
   }
 
   type Book {

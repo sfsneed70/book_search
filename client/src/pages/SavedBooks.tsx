@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
-import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
+import { removeBookId } from "../utils/localStorage";
 
 // import { getMe, deleteBook } from "../utils/API";
 import Auth from "../utils/auth";
-// import { removeBookId } from "../utils/localStorage";
-// import type { User } from "../models/User";
+// import type { User } from "../models/U
 
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
@@ -18,28 +17,29 @@ const SavedBooks = () => {
   //   // password: "",
   //   savedBooks: [],
   // });
-  const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+
+  // const [savedBookIds, setSavedBookIds] = useState<string[]>([]);
+
+  // const savedBookIdsLength = savedBookIds.length;
 
   const { loading, data } = useQuery(GET_ME);
 
   const [deleteBook, error] = useMutation(DELETE_BOOK, {
-    refetchQueries: [
-      GET_ME,
-      'me'
-    ]
+    refetchQueries: [GET_ME, "me"],
   });
 
-    // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
+refetchQueries: [GET_ME, "me"];
+
+  // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-  useEffect(() => {
-    return () => saveBookIds(savedBookIds);
-  });
+  // useEffect(() => {
+  //   return () => saveBookIds(savedBookIds);
+  // });
 
   // setUserData(data?.me || {});
   const userData = data?.me || {};
   //   // use this to determine if `useEffect()` hook needs to run again
   // const userDataLength = Object.keys(userData).length;
-
 
   const handleDeleteBook = async (bookId: string) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -52,7 +52,7 @@ const SavedBooks = () => {
       await deleteBook({
         variables: { bookId },
       });
-      setSavedBookIds(savedBookIds.filter((savedBookId: string) => savedBookId !== bookId));
+      removeBookId(bookId);
     } catch (err) {
       console.error(error);
     }

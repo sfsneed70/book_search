@@ -5,6 +5,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 // import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
+import { removeBookIdStorage } from '../utils/localStorage';
 
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
@@ -41,6 +42,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
       });
 
       Auth.login(data.addUser.token);
+      removeBookIdStorage();
     } catch (err) {
       console.error(err);
       setShowAlert(true);
@@ -53,38 +55,6 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
       savedBooks: [],
     });
   };
-
-  // const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-
-  //   // check if form has everything (as per react-bootstrap docs)
-  //   const form = event.currentTarget;
-  //   if (form.checkValidity() === false) {
-  //     event.preventDefault();
-  //     event.stopPropagation();
-  //   }
-
-  //   try {
-  //     const response = await createUser(userFormData);
-
-  //     if (!response.ok) {
-  //       throw new Error('something went wrong!');
-  //     }
-
-  //     const { token } = await response.json();
-  //     Auth.login(token);
-  //   } catch (err) {
-  //     console.error(err);
-  //     setShowAlert(true);
-  //   }
-
-  //   setUserFormData({
-  //     username: '',
-  //     email: '',
-  //     password: '',
-  //     savedBooks: [],
-  //   });
-  // };
 
   return (
     <>

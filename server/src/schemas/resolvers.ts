@@ -48,6 +48,7 @@ const resolvers = {
     users: async (): Promise<User[]> => {
       return await User.find();
     },
+
     me: async (_parent: any, _args: any, context: Context): Promise<User | null> => {
       if (context.user) {
         return await User.findOne({ _id: context.user._id })

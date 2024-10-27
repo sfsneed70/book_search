@@ -1,5 +1,6 @@
 // use this to decode a token and get the user's information out of it
 import { jwtDecode } from 'jwt-decode';
+import { removeBookIdStorage } from './localStorage';
 
 interface UserToken {
   name: string;
@@ -50,6 +51,7 @@ class AuthService {
   logout() {
     // Clear user token and profile data from localStorage
     localStorage.removeItem(tokenName);
+    removeBookIdStorage();
     // this will reload the page and reset the state of the application
     window.location.assign('/');
   }

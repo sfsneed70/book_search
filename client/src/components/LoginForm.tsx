@@ -3,7 +3,9 @@ import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { loginUser } from '../utils/API';
+// import { loginUser } from '../utils/API';
+import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
+
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
 
@@ -17,6 +19,16 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [login, { error }] = useMutation(LOGIN_USER);
 
+  // const [savedBookIds, setSavedBookIds] = "";
+
+
+  // const getSavedBooks = () => {
+  //   const { data } = useQuery(GET_BOOKIDS);
+  //   const savedBookIds = data?.me.savedBooks.map((book: any) => book.bookId) || [];
+  //   console.log("here");
+  // console.log(savedBookIds);
+  // };
+  
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
@@ -36,13 +48,18 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
       // const response = await loginUser(userFormData);
       const { data } = await login({ variables: { ...userFormData } });
 
-
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
       // }
 
       // const { token } = await response.json();
       // Auth.login(token);
+      let bookIds = [];
+      for (let i = 0; i < data.login.user.savedBooks.length; i++) {
+        bookIds.push(data.login.user.savedBooks[i].bookId);
+      }
+      saveBookIds(bookIds);
+
       Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
