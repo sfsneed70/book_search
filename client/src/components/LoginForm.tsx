@@ -1,14 +1,9 @@
-// see SignupForm.js for comments
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-
-// import { loginUser } from '../utils/API';
 import { saveBookIds } from "../utils/localStorage";
-
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
-
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
 
@@ -35,15 +30,8 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
-      // const response = await loginUser(userFormData);
       const { data } = await login({ variables: { ...userFormData } });
 
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
-
-      // const { token } = await response.json();
-      // Auth.login(token);
       let bookIds = [];
       for (let i = 0; i < data.login.user.savedBooks.length; i++) {
         bookIds.push(data.login.user.savedBooks[i].bookId);

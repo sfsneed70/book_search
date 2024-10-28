@@ -1,46 +1,19 @@
-// import { useState, useEffect } from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 import { removeBookId } from "../utils/localStorage";
-
-// import { getMe, deleteBook } from "../utils/API";
 import Auth from "../utils/auth";
-// import type { User } from "../models/U
-
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { DELETE_BOOK } from "../utils/mutations";
 
 const SavedBooks = () => {
-  // const [userData, setUserData] = useState({
-  //   username: "",
-  //   // email: "",
-  //   // password: "",
-  //   savedBooks: [],
-  // });
-
-  // const [savedBookIds, setSavedBookIds] = useState<string[]>([]);
-
-  // const savedBookIdsLength = savedBookIds.length;
-
   const { loading, data } = useQuery(GET_ME);
 
   const [deleteBook, error] = useMutation(DELETE_BOOK, {
     refetchQueries: [GET_ME, "me"],
   });
 
-refetchQueries: [GET_ME, "me"];
-
-  // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-  // useEffect(() => {
-  //   return () => saveBookIds(savedBookIds);
-  // });
-
-  // setUserData(data?.me || {});
   const userData = data?.me || {};
-  //   // use this to determine if `useEffect()` hook needs to run again
-  // const userDataLength = Object.keys(userData).length;
-
+ 
   const handleDeleteBook = async (bookId: string) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -82,7 +55,7 @@ refetchQueries: [GET_ME, "me"];
             : "You have no saved books!"}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+          {userData.savedBooks.map((book: any) => {
             return (
               <Col key={book.bookId} md="4">
                 <Card border="dark">

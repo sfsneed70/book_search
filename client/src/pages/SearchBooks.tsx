@@ -8,8 +8,9 @@ import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 import type { Book } from "../models/Book";
 import type { GoogleAPIBook } from "../models/GoogleAPIBook";
 
-import { useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { SAVE_BOOK } from "../utils/mutations";
+import { GET_ME } from "../utils/queries";
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -20,7 +21,10 @@ const SearchBooks = () => {
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
-  const [saveBook] = useMutation(SAVE_BOOK);
+  useQuery(GET_ME);  // this will cause an update so that the user's saved books are displayed
+  const [saveBook, error] = useMutation(SAVE_BOOK, {
+    refetchQueries: [GET_ME, "me"],
+  });
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -66,27 +70,21 @@ const SearchBooks = () => {
     const bookToSave: Book = searchedBooks.find(
       (book) => book.bookId === bookId
     )!;
-    // // get token
-    // const token = Auth.loggedIn() ? Auth.getToken() : null;
+    // get token
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-    // if (!token) {
-    //   return false;
-    // }
+    if (!token) {
+      return false;
+    }
 
     try {
       await saveBook({
         variables: { input: { ...bookToSave } },
       });
-      // const response = await saveBook(bookToSave, token);
-
-      // if (!response.ok) {
-      //   throw new Error("something went wrong!");
-      // }
-
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
-      console.error(err);
+      console.error(error);
     }
   };
 
