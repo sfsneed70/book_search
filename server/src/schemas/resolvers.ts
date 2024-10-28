@@ -19,15 +19,6 @@ interface AddUserArgs {
   };
 }
 
-// interface Book {
-//   bookId: string;
-//   title: string;
-//   authors: string[];
-//   description: string;
-//   image: string;
-//   link: string;
-// }
-
 interface saveBookArgs {
   input: {
     authors: string[];
@@ -45,9 +36,9 @@ interface Context {
 
 const resolvers = {
   Query: {
-    users: async (): Promise<User[]> => {
-      return await User.find();
-    },
+    // users: async (): Promise<User[]> => {
+    //   return await User.find();
+    // },
 
     me: async (_parent: any, _args: any, context: Context): Promise<User | null> => {
       if (context.user) {
@@ -92,7 +83,7 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
 
-    deleteBook: async (_parent: any, { bookId }: { bookId: string}, context: Context) => {
+    removeBook: async (_parent: any, { bookId }: { bookId: string}, context: Context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           {

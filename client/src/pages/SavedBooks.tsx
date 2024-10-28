@@ -3,18 +3,18 @@ import { removeBookId } from "../utils/localStorage";
 import Auth from "../utils/auth";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
-import { DELETE_BOOK } from "../utils/mutations";
+import { REMOVE_BOOK } from "../utils/mutations";
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
 
-  const [deleteBook, error] = useMutation(DELETE_BOOK, {
+  const [removeBook, error] = useMutation(REMOVE_BOOK, {
     refetchQueries: [GET_ME, "me"],
   });
 
   const userData = data?.me || {};
  
-  const handleDeleteBook = async (bookId: string) => {
+  const handleRemoveBook = async (bookId: string) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -22,7 +22,7 @@ const SavedBooks = () => {
     }
 
     try {
-      await deleteBook({
+      await removeBook({
         variables: { bookId },
       });
       removeBookId(bookId);
@@ -72,9 +72,9 @@ const SavedBooks = () => {
                     <Card.Text>{book.description}</Card.Text>
                     <Button
                       className="btn-block btn-danger"
-                      onClick={() => handleDeleteBook(book.bookId)}
+                      onClick={() => handleRemoveBook(book.bookId)}
                     >
-                      Delete this Book!
+                      Remove this Book!
                     </Button>
                   </Card.Body>
                 </Card>
