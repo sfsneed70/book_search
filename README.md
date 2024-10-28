@@ -13,7 +13,6 @@ Deployed Application:  https://book-search-5brh.onrender.com/
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [Tests](#tests)
 - [License](#license)
 - [Questions](#questions)
 
@@ -28,10 +27,6 @@ Run the application using: npm start<br>
 ## Contributing
 
 Fork the project. Create a feature branch. Commit your changes. Push the branch. Open a pull request.
-
-## Tests
-
-Run the application testing the various options. Add a truck, add a car, and add a motorbike. Test that a truck can tow and a motorbike can wheelie. Print details for the various vehicle types.
 
 ## License
 
