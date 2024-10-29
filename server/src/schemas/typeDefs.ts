@@ -3,7 +3,7 @@ const gql = String.raw;
 const typeDefs = gql`
   type User {
     _id: ID
-    username: String
+    username: String!
     email: String
     savedBooks: [Book]
     bookCount: Int
@@ -16,8 +16,8 @@ const typeDefs = gql`
   }
 
   type Book {
-    bookId: String
-    title: String
+    bookId: ID!
+    title: String!
     authors: [String]
     description: String
     image: String
@@ -46,7 +46,7 @@ const typeDefs = gql`
     addUser(input: UserInput!): Auth
     login(email: String!, password: String!): Auth
     saveBook( input: BookInput!): User
-    removeBook(bookId: String!): User
+    removeBook(bookId: ID!): User
   }
 `;
 

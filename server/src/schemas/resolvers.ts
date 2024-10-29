@@ -72,7 +72,7 @@ const resolvers = {
           { _id: context.user._id },
           { $addToSet: { savedBooks: input } },
           { new: true, runValidators: true }
-        ).populate("savedBooks");
+        );
         return updatedUser;
       }
       throw new AuthenticationError("You need to be logged in!");
@@ -84,9 +84,9 @@ const resolvers = {
           {
             _id: context.user._id,
           },
-          { $pull: { savedBooks: { bookId:  bookId} } },
+          { $pull: { savedBooks: { bookId} } },
           { new: true }
-        ).populate("savedBooks");
+        );
         return updatedUser;
       }
       throw new AuthenticationError("You need to be logged in!");
